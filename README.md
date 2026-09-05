@@ -2,7 +2,7 @@
 
 Personal engineering portfolio for Aryan Shah. The site presents projects, GitHub activity, technical experience, a resume, and a local retrieval-based AI assistant in a data-oriented interface.
 
-Live site: [aryanshah.dev](https://aryanshah.dev)
+Live site: [aryanshah.vercel.app](https://aryanshah.vercel.app)
 
 ## Features
 
