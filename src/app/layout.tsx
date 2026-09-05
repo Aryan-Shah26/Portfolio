@@ -71,8 +71,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <MobileNav />
 
           {/* Main Content */}
-          <main className="flex-1 lg:ml-64">
-            <div className="mx-auto max-w-6xl px-4 py-6 pt-16 sm:px-6 lg:px-8 lg:pt-6">
+          <main className="min-w-0 flex-1 lg:ml-64">
+            <div className="mx-auto min-w-0 max-w-6xl px-4 py-6 pt-16 sm:px-6 lg:px-8 lg:pt-6">
               {children}
             </div>
           </main>

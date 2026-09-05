@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Star, GitFork, Calendar } from 'lucide-react';
-import { getGitHubStats } from '@/lib/services/github';
+import { getGitHubReadme, getGitHubStats } from '@/lib/services/github';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Metadata } from 'next';
 
 export async function generateStaticParams() {
@@ -29,6 +31,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!repo) {
     notFound();
   }
+
+  const readme = await getGitHubReadme(repo.name);
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl">
@@ -78,6 +82,28 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </a>
         </div>
       </div>
+
+      {readme && (
+        <article className="glass-card min-w-0 overflow-hidden p-4 sm:p-8">
+          <div className="prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-muted prose-li:text-muted prose-strong:text-foreground prose-a:text-primary-light prose-code:break-words prose-code:bg-card prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:bg-card prose-pre:border-2 prose-pre:border-white/5 prose-table:block prose-table:max-w-full prose-table:overflow-x-auto prose-table:whitespace-nowrap">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ node, ...props }) => {
+                  void node;
+                  return <a {...props} target="_blank" rel="noreferrer" />;
+                },
+                img: ({ node, ...props }) => {
+                  void node;
+                  return <img {...props} className="h-auto max-w-full" alt={props.alt || ''} />;
+                },
+              }}
+            >
+              {readme}
+            </ReactMarkdown>
+          </div>
+        </article>
+      )}
     </div>
   );
 }

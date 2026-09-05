@@ -17,6 +17,42 @@ const LANGUAGE_COLORS: Record<string, string> = {
 };
 
 const GITHUB_GRAPHQL_API = 'https://api.github.com/graphql';
+const GITHUB_REST_API = 'https://api.github.com';
+
+export async function getGitHubReadme(repositoryName: string): Promise<string | null> {
+  const { token, username } = getEnv();
+  if (!token || !username) return null;
+
+  try {
+    const response = await fetch(
+      `${GITHUB_REST_API}/repos/${encodeURIComponent(username)}/${encodeURIComponent(repositoryName)}/readme`,
+      {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${token}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (response.status === 404) return null;
+    if (!response.ok) {
+      console.error(`GitHub README error for ${repositoryName}:`, await response.text());
+      return null;
+    }
+
+    const data = (await response.json()) as { content?: string; encoding?: string };
+    if (!data.content) return null;
+
+    return data.encoding === 'base64'
+      ? Buffer.from(data.content.replace(/\s/g, ''), 'base64').toString('utf8')
+      : data.content;
+  } catch (error) {
+    console.error(`Failed to fetch README for ${repositoryName}:`, error);
+    return null;
+  }
+}
 
 export async function getGitHubStats(): Promise<GitHubStats> {
   const { token, username } = getEnv();

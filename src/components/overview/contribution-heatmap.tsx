@@ -57,7 +57,7 @@ export default function ContributionHeatmap({ contributionData, totalContributio
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   
   return (
-    <div className="glass-card p-6 rounded-none flex flex-col gap-4">
+    <div className="glass-card min-w-0 max-w-full rounded-none p-4 flex flex-col gap-4 sm:p-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-foreground">Contribution Heatmap</h2>
@@ -68,7 +68,7 @@ export default function ContributionHeatmap({ contributionData, totalContributio
         </div>
       </div>
 
-      <div className="overflow-x-auto pb-2 -mx-2 px-2">
+      <div className="min-w-0 max-w-full overflow-x-auto pb-2 -mx-2 px-2">
         <div className="flex gap-1 min-w-max">
           <div className="flex flex-col gap-1 pr-2 pt-[18px] text-[10px] text-muted-foreground h-full justify-between">
             <span className="h-3 leading-3"></span>
