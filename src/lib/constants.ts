@@ -7,6 +7,7 @@ export const SITE_CONFIG = {
   url: 'https://aryanshah.dev',
   github: 'https://github.com/Aryan-Shah26',
   linkedin: 'https://linkedin.com/in/aryan-shah26',
+  codeforces: 'https://codeforces.com/profile/aryan_shah26',
   email: 'aryan26110417@gmail.com',
 } as const;
 
