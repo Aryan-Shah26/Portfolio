@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ProjectFilters } from '@/components/projects/project-filters';
 import { ProjectCard } from '@/components/projects/project-card';
+import { FEATURED_PROJECT_REPOS } from '@/lib/constants';
 import type { Project, GitHubStats } from '@/lib/types';
 
 const PROJECT_CATEGORY_OVERRIDES: Record<string, Project['category']> = {
@@ -37,6 +38,16 @@ function getProjectStatus(repo: GitHubStats['topRepos'][number]): Project['statu
   if (repo.isArchived) return 'archived';
   if (repo.homepageUrl) return 'deployed';
   return 'active';
+}
+
+function normalizeRepoName(name: string): string {
+  return name.toLowerCase().replace(/[-_\s]+/g, '');
+}
+
+function getFeaturedRank(project: Project): number {
+  return FEATURED_PROJECT_REPOS.findIndex(
+    (repoName) => normalizeRepoName(repoName) === normalizeRepoName(project.name)
+  );
 }
 
 export default function ProjectsPage() {
@@ -80,7 +91,7 @@ export default function ProjectsPage() {
   }, []);
 
   const filteredProjects = useMemo(() => {
-    return projects
+    const matchesFilters = projects
       .filter((project) => {
         const matchesSearch =
           search === '' ||
@@ -92,20 +103,25 @@ export default function ProjectsPage() {
         const matchesStatus = selectedStatus === 'all' || project.status === selectedStatus;
 
         return matchesSearch && matchesCategory && matchesStatus;
-      })
+      });
+
+    const featured = matchesFilters
+      .filter((project) => getFeaturedRank(project) >= 0)
+      .sort((a, b) => getFeaturedRank(a) - getFeaturedRank(b));
+    const remaining = matchesFilters
+      .filter((project) => getFeaturedRank(project) < 0)
       .sort((a, b) => {
-        if (sortBy === 'newest') {
-          return new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime();
-        }
-        if (sortBy === 'popular') {
-          return (b.stars || 0) - (a.stars || 0);
-        }
+        if (sortBy === 'popular') return (b.stars || 0) - (a.stars || 0);
         if (sortBy === 'active') {
           return new Date(b.lastUpdated || b.createdAt || '').getTime() - new Date(a.lastUpdated || a.createdAt || '').getTime();
         }
-        return 0;
+        return new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime();
       });
+
+    return { featured, remaining };
   }, [projects, search, selectedCategory, selectedStatus, sortBy]);
+
+  const displayedProjects = [...filteredProjects.featured, ...filteredProjects.remaining];
 
   if (loading) {
     return (
@@ -144,15 +160,39 @@ export default function ProjectsPage() {
 
       <div className="mt-8 mb-4">
         <p className="text-sm text-muted-foreground">
-          Showing {filteredProjects.length} of {projects.length} projects
+          Showing {displayedProjects.length} of {projects.length} projects
         </p>
       </div>
 
-      {filteredProjects.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
+      {displayedProjects.length > 0 ? (
+        <div className="space-y-10">
+          {filteredProjects.featured.length > 0 && (
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">Featured Projects</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Selected projects and deeper engineering work.</p>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {filteredProjects.featured.map((project) => (
+                  <ProjectCard key={project.slug} project={project} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {filteredProjects.remaining.length > 0 && (
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">All Projects</h2>
+                <p className="mt-1 text-sm text-muted-foreground">{sortBy === 'newest' ? 'Newest repositories first.' : 'Sorted using the selected view.'}</p>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {filteredProjects.remaining.map((project) => (
+                  <ProjectCard key={project.slug} project={project} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       ) : (
         <div className="text-center py-12 glass-card mt-4 rounded-none">

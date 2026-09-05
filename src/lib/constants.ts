@@ -30,6 +30,16 @@ export const PROJECT_CATEGORIES = [
   { value: 'web', label: 'Web' },
 ] as const;
 
+// Repository names are normalized in the Projects page, so spaces, hyphens, and underscores match.
+export const FEATURED_PROJECT_REPOS = [
+  'EDA-Agent',
+  'Chat-Engine',
+  'SLM-with-Test-Time-Compute-Scaling',
+  'M5-Forecasting',
+  'Internship-Tracker',
+  'Research-Paper-Bot'
+] as const;
+
 export const PROJECT_STATUSES = [
   { value: 'all', label: 'All' },
   { value: 'active', label: 'Active' },
