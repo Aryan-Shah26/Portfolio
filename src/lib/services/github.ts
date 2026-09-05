@@ -32,7 +32,7 @@ export async function getGitHubReadme(repositoryName: string): Promise<string | 
           Authorization: `Bearer ${token}`,
           'X-GitHub-Api-Version': '2022-11-28',
         },
-        next: { revalidate: 3600 },
+        next: { revalidate: 300 },
       }
     );
 
@@ -170,7 +170,7 @@ export async function getGitHubStats(): Promise<GitHubStats> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ query, variables: { username, cursor } }),
-        next: { revalidate: 3600 },
+        next: { revalidate: 300 },
       });
 
       if (!response.ok) {

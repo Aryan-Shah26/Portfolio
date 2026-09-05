@@ -59,7 +59,7 @@ export default function ProjectsPage() {
   const [sortBy, setSortBy] = useState('newest');
 
   useEffect(() => {
-    fetch('/api/github-stats')
+    fetch('/api/github-stats', { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) throw new Error('GitHub stats request failed');
         return res.json();

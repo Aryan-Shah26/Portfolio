@@ -6,10 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Metadata } from 'next';
 
-export async function generateStaticParams() {
-  const stats = await getGitHubStats();
-  return stats.topRepos.map((repo) => ({ slug: repo.name }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
