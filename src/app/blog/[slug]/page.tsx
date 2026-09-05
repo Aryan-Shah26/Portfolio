@@ -59,7 +59,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </header>
 
       <div
-        className="glass-card p-8 mt-4 prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-muted prose-li:text-muted prose-strong:text-foreground prose-code:bg-card prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-card prose-pre:border-2 prose-pre:border-white/5"
+        className="glass-card mt-4 max-w-none overflow-hidden p-4 prose prose-invert prose-headings:text-foreground prose-p:text-muted prose-li:text-muted prose-strong:text-foreground prose-code:bg-card prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:bg-card prose-pre:border-2 prose-pre:border-white/5 sm:p-8"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
     </article>

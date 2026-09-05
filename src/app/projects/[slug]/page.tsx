@@ -39,7 +39,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <div className="mb-12">
         <div className="flex items-center gap-3 mb-4">
-          <h1 className="text-3xl font-bold text-foreground">{repo.name}</h1>
+            <h1 className="break-words text-2xl font-bold text-foreground sm:text-3xl">{repo.name}</h1>
         </div>
         
         <p className="text-lg text-muted mb-6">{repo.description}</p>
@@ -52,7 +52,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mb-8 pb-8 border-b border-border">
+        <div className="mb-8 flex flex-wrap items-center gap-4 border-b border-border pb-8 text-sm text-muted-foreground sm:gap-6">
           <div className="flex items-center gap-2">
             <Star className="w-4 h-4" />
             {repo.stars} stars

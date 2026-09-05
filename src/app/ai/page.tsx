@@ -93,8 +93,8 @@ export default function AIPage() {
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        <div className="flex-1 glass-card p-0 flex flex-col h-[600px] overflow-hidden">
+      <div className="flex min-w-0 flex-col gap-6 lg:flex-row">
+        <div className="flex h-[min(600px,calc(100dvh-9rem))] min-h-[420px] min-w-0 flex-1 flex-col overflow-hidden glass-card p-0 sm:h-[600px]">
           <div className="bg-card/80 px-4 py-3 border-b border-border rounded-t-xl flex items-center gap-2">
             <Bot className="w-5 h-5 text-primary" />
             <h2 className="text-base font-semibold text-foreground">Ask my AI</h2>
@@ -105,7 +105,7 @@ export default function AIPage() {
               <div 
                 key={msg.id}
                 className={cn(
-                  "flex flex-col max-w-[80%]",
+                  "flex max-w-[92%] min-w-0 flex-col sm:max-w-[80%]",
                   msg.role === 'user' ? "self-end items-end" : "self-start items-start"
                 )}
               >
@@ -118,7 +118,7 @@ export default function AIPage() {
                   )}
                 >
                   {msg.role === 'assistant' ? (
-                    <div className="space-y-2 leading-6 [&_a]:text-primary-light [&_a]:underline [&_code]:rounded [&_code]:bg-background/60 [&_code]:px-1 [&_code]:py-0.5 [&_h1]:text-base [&_h1]:font-semibold [&_h2]:text-base [&_h2]:font-semibold [&_h3]:font-semibold [&_li]:ml-4 [&_ol]:list-decimal [&_p]:min-h-5 [&_strong]:font-semibold [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-border [&_th]:bg-background/50 [&_th]:px-2 [&_th]:py-1 [&_ul]:list-disc">
+                    <div className="min-w-0 space-y-2 leading-6 [&_a]:text-primary-light [&_a]:underline [&_code]:break-words [&_code]:rounded [&_code]:bg-background/60 [&_code]:px-1 [&_code]:py-0.5 [&_h1]:text-base [&_h1]:font-semibold [&_h2]:text-base [&_h2]:font-semibold [&_h3]:font-semibold [&_li]:ml-4 [&_ol]:list-decimal [&_p]:min-h-5 [&_strong]:font-semibold [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:whitespace-nowrap [&_td]:border [&_td]:border-border [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-border [&_th]:bg-background/50 [&_th]:px-2 [&_th]:py-1 [&_ul]:list-disc">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
@@ -172,7 +172,7 @@ export default function AIPage() {
             ))}
             
             {isTyping && (
-              <div className="self-start items-start flex flex-col max-w-[80%]">
+              <div className="flex max-w-[92%] flex-col items-start self-start sm:max-w-[80%]">
                 <div className="px-4 py-3 bg-card text-foreground rounded-2xl rounded-bl-md border-2 border-border flex items-center gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:-0.3s]"></div>
                   <div className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:-0.15s]"></div>
@@ -184,7 +184,7 @@ export default function AIPage() {
             <div ref={messagesEndRef} />
           </div>
 
-          <form onSubmit={handleSubmit} className="border-t border-border p-4 flex gap-2">
+          <form onSubmit={handleSubmit} className="flex gap-2 border-t border-border p-3 sm:p-4">
             <input
               id="ai-query"
               type="text"
@@ -194,7 +194,7 @@ export default function AIPage() {
               className="flex-1 bg-card border-2 border-border rounded-none px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
             />
             <label htmlFor="ai-query" className="sr-only">Ask a question</label>
-            <button 
+            <button
               type="submit"
               aria-label="Send question"
               disabled={!input.trim() || isTyping}
@@ -205,7 +205,7 @@ export default function AIPage() {
           </form>
         </div>
 
-        <div className="w-full lg:w-80 glass-card p-5 h-fit space-y-4">
+        <div className="w-full space-y-4 glass-card p-4 sm:p-5 lg:w-80 lg:shrink-0">
           <h3 className="text-sm font-semibold text-foreground">Suggested Questions</h3>
           <div className="space-y-2">
             {SUGGESTED_PROMPTS.map((prompt, i) => (
